@@ -3,15 +3,14 @@ package solver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class Constraints {
 	public HashMap<String, HashSet<String>> complementary_set;
 	public ArrayList<Variable> vars;
-	public ArrayList<Entry<String,String>> pos_constraints, neg_constraints;
+	public HashMap<String,HashSet<String>> pos_constraints, neg_constraints;
 	
-	public Constraints(ArrayList<Variable> vars, ArrayList<Entry<String,String>> pos_constraints, ArrayList<Entry<String,String>> neg_constraints){
+	public Constraints(ArrayList<Variable> vars, HashMap<String,HashSet<String>> pos_constraints, HashMap<String,HashSet<String>> neg_constraints){
 		this.pos_constraints = pos_constraints;
 		this.neg_constraints = neg_constraints;
 		this.vars = vars;
@@ -30,12 +29,13 @@ public class Constraints {
 	}
 	
 	public boolean check_consistency(Assignment assignment){
-		for(Entry<?, ?> constraint : pos_constraints)
-			if( assignment.contains((String)constraint.getKey()) && !assignment.contains((String)constraint.getValue()))
+		for (String val :assignment.assignment){
+			if(pos_constraints.containsKey(val) && !assignment.containsAll(pos_constraints.get(val)))
 				return false;
-		for(Entry<?, ?> constraint : neg_constraints)
-			if( assignment.contains((String)constraint.getKey()) && assignment.contains((String)constraint.getValue()))
+			if(neg_constraints.containsKey(val) &&  assignment.containsAll(neg_constraints.get(val)))
 				return false;
+				
+		}
 		return true;
 	}
 	

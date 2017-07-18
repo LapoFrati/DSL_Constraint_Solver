@@ -1,9 +1,9 @@
 package parsing;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Queue;
-import java.util.Map.Entry;
-
 import solver.Constraints;
 import solver.DSL;
 import solver.Variable;
@@ -36,8 +36,8 @@ public class Parser {
 		return dsl;
 	}
 	
-	public ArrayList<Entry<String,String>> constr() throws ParseError{ // { (y1, z1), (y2, z2), (y3, z3) }\n
-		ArrayList<Entry<String,String>> constraints = new ArrayList<Entry<String, String>>();
+	public HashMap<String,HashSet<String>> constr() throws ParseError{ // { (y1, z1), (y2, z2), (y3, z3) }\n
+		HashMap<String,HashSet<String>> constraints = new HashMap<>();
 		String val1,val2;
 		optional("!");
 		expect("\\{");
@@ -48,7 +48,13 @@ public class Parser {
 			val2 = expect(allowed_var_values);
 			expect("\\)");
 			optional(",");
-			constraints.add(new java.util.AbstractMap.SimpleEntry<String, String>(val1, val2));
+			if(constraints.containsKey(val1))
+				constraints.get(val1).add(val2);
+			else{
+				HashSet<String> new_entry = new HashSet<String>();
+				new_entry.add(val2);
+				constraints.put(val1, new_entry);
+			}	
 		}
 		expect("}");
 		optional("\n");

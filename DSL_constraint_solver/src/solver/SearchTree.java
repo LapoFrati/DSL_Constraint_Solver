@@ -3,7 +3,6 @@ package solver;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 
 public class SearchTree {
@@ -46,16 +45,14 @@ public class SearchTree {
 					// now compute the effect of the assignment on positive/negative constraints
 					@SuppressWarnings("unchecked")
 					HashSet<String> new_invalid_values = (HashSet<String>) invalid_values.clone();
-					for(Entry<?,?> constraint : constraints.pos_constraints){ 
-						if ( value.equals((String) constraint.getKey())){ // for positive constraints mark all the other values as invalid
-							new_invalid_values.addAll(constraints.getComplementarySet((String)constraint.getValue()));
+					if ( constraints.pos_constraints.containsKey(value))
+						for(String constraint : constraints.pos_constraints.get(value)){
+							new_invalid_values.addAll(constraints.getComplementarySet(constraint));
 						}
-					}
-					for(Entry<?,?> constraint : constraints.neg_constraints){
-						if ( value.equals((String) constraint.getKey())){
-							new_invalid_values.add((String)constraint.getValue());
+					if ( constraints.neg_constraints.containsKey(value))
+						for(String constraint : constraints.neg_constraints.get(value)){
+							new_invalid_values.add(constraint);
 						}
-					}
 					
 					LinkedList<Variable> new_remaining_vars = new LinkedList<>();
 					for(Variable var : remaining_vars){

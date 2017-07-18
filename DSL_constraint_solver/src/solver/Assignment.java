@@ -2,6 +2,7 @@ package solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 public class Assignment {
 	ArrayList<String> assignment;
@@ -34,6 +35,10 @@ public class Assignment {
 	
 	public boolean contains(String value){
 		return assignment.contains(value);
+	}
+	
+	public boolean containsAll(Set<String> constraints){
+		return assignment.containsAll(constraints);
 	}
 	
 	@SuppressWarnings("unchecked")

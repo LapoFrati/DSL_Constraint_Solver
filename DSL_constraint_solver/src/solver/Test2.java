@@ -6,6 +6,7 @@ import parsing.Parser;
 
 
 public class Test2{
+	
         public static String transform(String str){
         	if(str == "ab")
         		return "a";

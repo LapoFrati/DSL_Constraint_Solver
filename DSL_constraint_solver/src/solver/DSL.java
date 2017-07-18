@@ -1,11 +1,12 @@
 package solver;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class DSL {
 	public ArrayList<Variable> vars;
-	public ArrayList<Entry<String,String>> pos_constraints, neg_constraints;
+	public HashMap<String,HashSet<String>> pos_constraints, neg_constraints;
 	public Assignment solution;
 	public Constraints constraints;
 	
@@ -37,9 +38,9 @@ public class DSL {
 	public void print(){
 		for(Variable var : vars)
 			var.print();
-		for (Entry<String, String> val: pos_constraints)
-            System.out.println(val.getKey() + "  -> " + val.getValue());
-		for (Entry<String, String> val: neg_constraints)
-            System.out.println(val.getKey() + " !-> " + val.getValue());
+		for (String val: pos_constraints.keySet())
+            System.out.println(val + "  -> " + pos_constraints.get(val));
+		for (String val: neg_constraints.keySet())
+            System.out.println(val + "  !-> " + pos_constraints.get(val));
 	}
 }
