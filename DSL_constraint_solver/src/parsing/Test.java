@@ -2,15 +2,12 @@ package parsing;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map.Entry;
-
-import javax.swing.SpringLayout.Constraints;
-
 import solver.DSL;
 import solver.Variable;
 
 public class Test {
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String args[]) throws IOException, ParseError {
 		
 		//"src/parsing/test.txt"

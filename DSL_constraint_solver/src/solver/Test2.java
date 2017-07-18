@@ -1,25 +1,11 @@
 package solver;
 
 import java.io.IOException;
-import java.util.function.IntSupplier;
-
 import parsing.ParseError;
 import parsing.Parser;
 
 
 public class Test2{
-        private static class SqSupplier implements IntSupplier
-        {
-                int i = 0;
- 
-                @Override
-                public int getAsInt()
-                {
-                        i++;
-                        return i;
-                }
-        }
-        
         public static String transform(String str){
         	if(str == "ab")
         		return "a";
@@ -30,33 +16,6 @@ public class Test2{
  
         public static void main(String args[]) throws IOException, ParseError
         {
-        	// Iterator implemented as anonymous class.  This uses generics but doesn't need to.
-        /*	for (int i: new Iterable<Integer>() {
-        	    @Override
-        	    public Iterator<Integer> iterator() {
-        	        return new Iterator<Integer>() {
-        	            int counter = 1;
-
-        	            @Override
-        	            public boolean hasNext() {
-        	                return counter <= 10000000;
-        	            }
-
-        	            @Override
-        	            public Integer next() {
-        	                return counter++;
-        	            }
-
-        	            @Override
-        	            public void remove() {
-        	                throw new UnsupportedOperationException();
-        	            }
-        	        };
-        	    }
-        	}) {
-        	    System.out.println(i);
-        	}
-        	*/
         	/*
         	ArrayList<String> test = new ArrayList<>();
         	test.add("ab");

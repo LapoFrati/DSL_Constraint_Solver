@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 
 
 public class SearchTree {
@@ -35,10 +34,9 @@ public class SearchTree {
 			this.remaining_vars = new LinkedList<>();
 			for(Variable var : vars){
 				remaining_vars.add(var.clone());
-			}
+			} //TODO: DO I NEED THIS?
 			
-			System.out.print("assign: "); assignment.print();
-			System.out.println("invalid: "+invalid_values);
+			
 			if(!assignment.complete()){
 				Variable curr_var = remaining_vars.pop(); // get a variable from the list of available ones
 				
@@ -49,7 +47,7 @@ public class SearchTree {
 					@SuppressWarnings("unchecked")
 					HashSet<String> new_invalid_values = (HashSet<String>) invalid_values.clone();
 					for(Entry<?,?> constraint : constraints.pos_constraints){ 
-						if ( value == (String) constraint.getKey()){ // for positive constraints mark all the other values as invalid
+						if ( value.equals((String) constraint.getKey())){ // for positive constraints mark all the other values as invalid
 							new_invalid_values.addAll(constraints.getComplementarySet((String)constraint.getValue()));
 						}
 					}
@@ -61,11 +59,19 @@ public class SearchTree {
 					
 					LinkedList<Variable> new_remaining_vars = new LinkedList<>();
 					for(Variable var : remaining_vars){
-						new_remaining_vars.add(var.clone());
+						Variable new_var = var.clone();
+						new_var.domain.removeAll(new_invalid_values);
+						new_remaining_vars.add(new_var);
 					}
 					
 					children.add(new SearchNode(this, new_invalid_values, new_assignment, new_remaining_vars));
 				}
+			} else {
+					
+					System.out.print("assign: "); assignment.print();
+					System.out.println(constraints.check_consistency(assignment));
+					System.out.println("invalid: "+invalid_values);
+				
 			}
 			
 		}
