@@ -49,4 +49,12 @@ public class Assignment {
 	public void print(){
 		System.out.println(Arrays.toString(assignment.toArray()));
 	}
+	
+	public void printSudoku(){
+		for(int i = 0; i < 16; i++){
+			System.out.print( assignment.get(i).charAt(1) + " " );
+			if((i+1) % 4 == 0)
+				System.out.println();
+		}
+	}
 }
