@@ -1,6 +1,7 @@
 package solver;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import parsing.ParseError;
 import parsing.Parser;
 
@@ -28,11 +29,23 @@ public class Test2{
         	ArrayList<Character> test3 = (ArrayList) "abc".chars().mapToObj(i -> (char)i).collect(Collectors.toList());
         	System.out.println(test3);
         	*/
+        	
         	Parser parser = new Parser("src/parsing/test.txt");
     		DSL dsl = parser.parse();
     		dsl.solve_recursively().print();
-        	Constraints constr = new Constraints(dsl.vars, dsl.pos_constraints, dsl.neg_constraints);
-        	System.out.println(constr.complementary_set);
-        	SearchTree tree = new SearchTree(dsl.vars, constr);
+        	SearchTree tree = new SearchTree(dsl.vars, dsl.constraints);
+        	
+        	ArrayList<Assignment> solutions = new ArrayList<>();
+        	while(tree.hasNext()){
+        		Assignment ass = tree.next();
+        		System.out.println(ass.getAssignment());
+        		solutions.add(ass);
+        	}
+        	
+        	
+        	System.out.println("Solutions:");
+        	for(Assignment assign : solutions)
+        		System.out.println(assign.getAssignment());
+        	
         }
 }

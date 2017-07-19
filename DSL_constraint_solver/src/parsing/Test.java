@@ -1,20 +1,18 @@
 package parsing;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import solver.DSL;
-import solver.Variable;
 
 public class Test {
 	
-	@SuppressWarnings("unchecked")
 	public static void main(String args[]) throws IOException, ParseError {
 		
 		//"src/parsing/test.txt"
 		Parser parser = new Parser("src/parsing/test.txt");
 		DSL dsl = parser.parse();
-		dsl.solve_recursively().print();
+		dsl.solve_recursively().printSudoku();
 		
+		/*
 		System.out.println();
 		ArrayList<Variable> copy = new ArrayList<Variable>();
 		for (Variable var: dsl.vars){
@@ -31,6 +29,6 @@ public class Test {
 		test2.add("test2");
 		System.out.println(test);
 		System.out.println(test2);
-	
+	*/
 	}
 }

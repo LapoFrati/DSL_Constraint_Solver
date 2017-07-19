@@ -63,7 +63,7 @@ public class SearchTree {
 			} else {
 				try{
 					queue.put(assignment);
-					//System.out.println("Produced "+new_assignment2.getAssignment());
+					System.out.println("Produced "+assignment.getAssignment());
             	} catch (InterruptedException e) {
                 e.printStackTrace();
             	}
@@ -81,7 +81,6 @@ public class SearchTree {
 		}
 		
 		public HashSet<String> update_invalid_values(String value){
-			@SuppressWarnings("unchecked")
 			HashSet<String> new_invalid_values = new HashSet<>();
 			if ( constraints.pos_constraints.containsKey(value))
 				for(String constraint : constraints.pos_constraints.get(value)){
