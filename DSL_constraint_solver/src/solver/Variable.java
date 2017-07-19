@@ -6,14 +6,11 @@ import java.util.Arrays;
 
 public class Variable {
 	String var_name;
-	int domain_size;
 	public ArrayList<String> domain;
-	boolean assigned;
 	
 	public Variable(String name, ArrayList<String> values){
 		var_name = name;
 		domain = values;
-		assigned = false;
 	}
 	
 	public ArrayDeque<String> getDomain(){

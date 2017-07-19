@@ -41,6 +41,6 @@ public class DSL {
 		for (String val: pos_constraints.keySet())
             System.out.println(val + "  -> " + pos_constraints.get(val));
 		for (String val: neg_constraints.keySet())
-            System.out.println(val + "  !-> " + pos_constraints.get(val));
+            System.out.println(val + "  !-> " + neg_constraints.get(val));
 	}
 }

@@ -29,11 +29,7 @@ public class SearchTree {
 			this.assignment = assignment;
 			this.parent = parent;
 			this.children = new ArrayList<>();
-			//this.remaining_vars = vars;
-			this.remaining_vars = new LinkedList<>();
-			for(Variable var : vars){
-				remaining_vars.add(var.clone());
-			} //TODO: DO I NEED THIS?
+			this.remaining_vars = vars;
 			
 			
 			if(!assignment.complete()){
