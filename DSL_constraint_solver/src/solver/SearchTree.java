@@ -3,72 +3,95 @@ package solver;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class SearchTree {
 	public LinkedList<Variable> vars;
 	public Constraints constraints;
-	public SearchNode root;
-	
+	public Producer producer;
+	public ArrayBlockingQueue<Assignment> queue;
+	public boolean hasNext;
+	public Object lock;
 	
 	public SearchTree(ArrayList<Variable> vars , Constraints constraints) {
 		this.vars = new LinkedList<>(vars);
 		this.constraints = constraints;
-		this.root = new SearchNode(null, new HashSet<>(), new Assignment(vars.size()), this.vars);
+		this.queue = new ArrayBlockingQueue<>(1);
+		this.hasNext = true;
+		this.lock = new Object();
+		this.producer = new Producer();
+		new Thread(producer).start();
 	}
 	
-	public class SearchNode {
-		Assignment assignment;
-		SearchNode parent;
-		HashSet<String> invalid_values;
-		ArrayList<SearchNode> children;
-		LinkedList<Variable> remaining_vars;
+	public void finishedSearch(){
+		synchronized (lock) {
+			hasNext = false;
+		}
+	}
+	
+	public boolean hasNext(){
+		synchronized (lock) {
+				return !queue.isEmpty() || hasNext; 
+		}
+	}
+	
+	public Assignment next(){
+		try { 	return queue.take();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public class Producer implements Runnable{
+		public void run(){
+			explore(new HashSet<>(), new Assignment(vars.size()), vars);
+			finishedSearch();
+		}
 		
-		public SearchNode(SearchNode parent, HashSet<String> invalid_values, Assignment assignment, LinkedList<Variable> vars){
-			this.invalid_values = invalid_values;
-			this.assignment = assignment;
-			this.parent = parent;
-			this.children = new ArrayList<>();
-			this.remaining_vars = vars;
-			
-			
+		public void explore(HashSet<String> invalid_values, Assignment assignment, LinkedList<Variable> remaining_vars){
 			if(!assignment.complete()){
 				Variable curr_var = remaining_vars.pop(); // get a variable from the list of available ones
-				
 				for (String value : curr_var.domain){ // for each value in the domain of that variable try to assign it
 					Assignment new_assignment = assignment.clone();
 					new_assignment.assign(value);
-					// now compute the effect of the assignment on positive/negative constraints
-					@SuppressWarnings("unchecked")
-					HashSet<String> new_invalid_values = (HashSet<String>) invalid_values.clone();
-					if ( constraints.pos_constraints.containsKey(value))
-						for(String constraint : constraints.pos_constraints.get(value)){
-							new_invalid_values.addAll(constraints.getComplementarySet(constraint));
-						}
-					if ( constraints.neg_constraints.containsKey(value))
-						for(String constraint : constraints.neg_constraints.get(value)){
-							new_invalid_values.add(constraint);
-						}
-					
-					LinkedList<Variable> new_remaining_vars = new LinkedList<>();
-					for(Variable var : remaining_vars){
-						Variable new_var = var.clone();
-						new_var.domain.removeAll(new_invalid_values);
-						new_remaining_vars.add(new_var);
-					}
-					
-					children.add(new SearchNode(this, new_invalid_values, new_assignment, new_remaining_vars));
+					HashSet<String> new_invalid_values = update_invalid_values(invalid_values, value);
+					LinkedList<Variable> new_remaining_vars = update_remaining_variables(remaining_vars, new_invalid_values);
+					explore(new_invalid_values, new_assignment, new_remaining_vars);
 				}
 			} else {
-					
-					System.out.print("assign: "); assignment.print();
-					System.out.println(constraints.check_consistency(assignment));
-					System.out.println("invalid: "+invalid_values);
-				
-			}
-			
+				try{
+					queue.put(assignment);
+					//System.out.println("Produced "+new_assignment2.getAssignment());
+            	} catch (InterruptedException e) {
+                e.printStackTrace();
+            	}
+            }
 		}
 		
+		public LinkedList<Variable> update_remaining_variables(LinkedList<Variable> remaining_vars, HashSet<String> new_invalid_values){
+			LinkedList<Variable> new_remaining_vars = new LinkedList<>();
+			for(Variable var : remaining_vars){
+				Variable new_var = var.clone();
+				new_var.domain.removeAll(new_invalid_values);
+				new_remaining_vars.add(new_var);
+			}
+			return new_remaining_vars;
+		}
 		
+		public HashSet<String> update_invalid_values(HashSet<String> invalid_values, String value){
+			@SuppressWarnings("unchecked")
+			HashSet<String> new_invalid_values = (HashSet<String>) invalid_values.clone();
+			if ( constraints.pos_constraints.containsKey(value))
+				for(String constraint : constraints.pos_constraints.get(value)){
+					new_invalid_values.addAll(constraints.getComplementarySet(constraint));
+				}
+			if ( constraints.neg_constraints.containsKey(value))
+				for(String constraint : constraints.neg_constraints.get(value)){
+					new_invalid_values.add(constraint);
+				}
+			return new_invalid_values;
+		}
 	}
 }
