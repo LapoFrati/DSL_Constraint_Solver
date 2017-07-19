@@ -32,8 +32,10 @@ public class Constraints {
 		for (String val :assignment.assignment){
 			if(pos_constraints.containsKey(val) && !assignment.containsAll(pos_constraints.get(val)))
 				return false;
-			if(neg_constraints.containsKey(val) &&  assignment.containsAll(neg_constraints.get(val)))
-				return false;
+			if(neg_constraints.containsKey(val))
+				for ( String str : neg_constraints.get(val))
+					if( assignment.contains(str))
+						return false;
 				
 		}
 		return true;
