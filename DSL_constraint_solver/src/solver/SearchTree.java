@@ -46,19 +46,19 @@ public class SearchTree {
 	
 	public class Producer implements Runnable{
 		public void run(){
-			explore(new HashSet<>(), new Assignment(vars.size()), vars);
+			explore(new Assignment(vars.size()), vars);
 			finishedSearch();
 		}
 		
-		public void explore(HashSet<String> invalid_values, Assignment assignment, LinkedList<Variable> remaining_vars){
+		public void explore(Assignment assignment, LinkedList<Variable> remaining_vars){
 			if(!assignment.complete()){
 				Variable curr_var = remaining_vars.pop(); // get a variable from the list of available ones
 				for (String value : curr_var.domain){ // for each value in the domain of that variable try to assign it
 					Assignment new_assignment = assignment.clone();
 					new_assignment.assign(value);
-					HashSet<String> new_invalid_values = update_invalid_values(invalid_values, value);
+					HashSet<String> new_invalid_values = update_invalid_values(value);
 					LinkedList<Variable> new_remaining_vars = update_remaining_variables(remaining_vars, new_invalid_values);
-					explore(new_invalid_values, new_assignment, new_remaining_vars);
+					explore(new_assignment, new_remaining_vars);
 				}
 			} else {
 				try{
@@ -80,9 +80,9 @@ public class SearchTree {
 			return new_remaining_vars;
 		}
 		
-		public HashSet<String> update_invalid_values(HashSet<String> invalid_values, String value){
+		public HashSet<String> update_invalid_values(String value){
 			@SuppressWarnings("unchecked")
-			HashSet<String> new_invalid_values = (HashSet<String>) invalid_values.clone();
+			HashSet<String> new_invalid_values = new HashSet<>();
 			if ( constraints.pos_constraints.containsKey(value))
 				for(String constraint : constraints.pos_constraints.get(value)){
 					new_invalid_values.addAll(constraints.getComplementarySet(constraint));
