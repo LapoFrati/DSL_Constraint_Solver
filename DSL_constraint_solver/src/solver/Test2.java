@@ -32,20 +32,19 @@ public class Test2{
         	
         	Parser parser = new Parser("src/parsing/test.txt");
     		DSL dsl = parser.parse();
-    		dsl.solve_recursively().print();
+    		//dsl.solve_recursively().print();
         	SearchTree tree = new SearchTree(dsl.vars, dsl.constraints);
         	
+        
         	ArrayList<Assignment> solutions = new ArrayList<>();
-        	while(tree.hasNext()){
-        		Assignment ass = tree.next();
-        		System.out.println(ass.getAssignment());
+        	for(Assignment ass : tree){
+        		//System.out.println(ass.getAssignment());
         		solutions.add(ass);
         	}
         	
         	
         	System.out.println("Solutions:");
         	for(Assignment assign : solutions)
-        		System.out.println(assign.getAssignment());
-        	
+        		assign.print();
         }
 }

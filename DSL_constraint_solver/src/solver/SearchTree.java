@@ -2,11 +2,12 @@ package solver;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
 
 
-public class SearchTree {
+public class SearchTree implements Iterable<Assignment>{
 	public LinkedList<Variable> vars;
 	public Constraints constraints;
 	public Producer producer;
@@ -24,27 +25,27 @@ public class SearchTree {
 		new Thread(producer).start();
 	}
 	
-	public void finishedSearch(){
-		synchronized (lock) {
-			hasNext = false;
+	public class Producer implements Runnable, Iterator<Assignment>{
+		public void finishedSearch(){
+			synchronized (lock) {
+				hasNext = false;
+			}
 		}
-	}
-	
-	public boolean hasNext(){
-		synchronized (lock) {
-				return !queue.isEmpty() || hasNext; 
+		
+		public boolean hasNext(){
+			synchronized (lock) {
+					return !queue.isEmpty() || hasNext; 
+			}
 		}
-	}
-	
-	public Assignment next(){
-		try { 	return queue.take();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		
+		public Assignment next(){
+			try { 	return queue.take();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
-		return null;
-	}
-	
-	public class Producer implements Runnable{
+		
 		public void run(){
 			explore(new Assignment(vars.size()), vars);
 			finishedSearch();
@@ -63,7 +64,7 @@ public class SearchTree {
 			} else {
 				try{
 					queue.put(assignment);
-					System.out.println("Produced "+assignment.getAssignment());
+					//System.out.println("Produced "+assignment.getAssignment());
             	} catch (InterruptedException e) {
                 e.printStackTrace();
             	}
@@ -92,5 +93,12 @@ public class SearchTree {
 				}
 			return new_invalid_values;
 		}
+
+		
+	}
+
+	@Override
+	public Iterator<Assignment> iterator() {
+		return new Producer();
 	}
 }
