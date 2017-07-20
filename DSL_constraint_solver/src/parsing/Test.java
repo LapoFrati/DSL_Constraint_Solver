@@ -7,10 +7,11 @@ public class Test {
 	
 	public static void main(String args[]) throws IOException, ParseError {
 		
-		//"src/parsing/test.txt"
-		Parser parser = new Parser("src/parsing/test.txt");
+		Parser parser = new Parser("src/parsing/sudoku.txt");
+		//Parser parser = new Parser("src/parsing/test.txt");
 		DSL dsl = parser.parse();
-		dsl.solve_recursively().printSudoku();
+		//dsl.solve_recursively().printSudoku();
+		dsl.solve_recursively().explain();
 		
 		/*
 		System.out.println();

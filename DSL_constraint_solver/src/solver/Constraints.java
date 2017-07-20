@@ -29,14 +29,17 @@ public class Constraints {
 	}
 	
 	public boolean check_consistency(Assignment assignment){
-		for (String val :assignment.assignment){
-			if(pos_constraints.containsKey(val) && !assignment.containsAll(pos_constraints.get(val)))
-				return false;
+		for (String val :assignment.getAssignment()){
+			if(pos_constraints.containsKey(val))
+				if(!assignment.containsAll(pos_constraints.get(val)))
+					return false;
+				else
+					assignment.addActiveConstraint(val, pos_constraints.get(val));
+				
 			if(neg_constraints.containsKey(val))
 				for ( String str : neg_constraints.get(val))
 					if( assignment.contains(str))
 						return false;
-				
 		}
 		return true;
 	}
