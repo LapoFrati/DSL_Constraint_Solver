@@ -34,12 +34,14 @@ public class Constraints {
 				if(!assignment.containsAll(pos_constraints.get(val)))
 					return false;
 				else
-					assignment.addActiveConstraint(val, pos_constraints.get(val));
+					assignment.addExplanationPositive(val, pos_constraints.get(val));
 				
 			if(neg_constraints.containsKey(val))
 				for ( String str : neg_constraints.get(val))
 					if( assignment.contains(str))
 						return false;
+					else
+						assignment.addExplanationNegative(val, str);
 		}
 		return true;
 	}

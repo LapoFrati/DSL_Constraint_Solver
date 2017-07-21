@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Assignment {
 	ArrayList<String> assignment;
-	public HashMap<String,HashSet<String>> active_pos_constraints;
+	public HashMap<String,HashSet<String>> active_pos_constraints, active_neg_constraints;
 	int size, curr_size;
 	
 	public Assignment(int size){
@@ -22,6 +22,7 @@ public class Assignment {
 		this.size = size;
 		this.assignment = assignment;
 		this.active_pos_constraints = new HashMap<>();
+		this.active_neg_constraints = new HashMap<>();
 		this.curr_size = curr_size;
 	}
 	
@@ -55,7 +56,7 @@ public class Assignment {
 		System.out.println(Arrays.toString(assignment.toArray()));
 	}
 	
-	public void addActiveConstraint(String val, HashSet<String> pos_constraints){
+	public void addExplanationPositive(String val, HashSet<String> pos_constraints){
 		HashSet<String> values = active_pos_constraints.get(val);
 		if(values == null)
 			active_pos_constraints.put(val, pos_constraints);
@@ -63,9 +64,27 @@ public class Assignment {
 			values.addAll(pos_constraints);
 	}
 	
+	public void addExplanationNegative(String val, String neg_constraint){
+		HashSet<String> values = active_neg_constraints.get(val);
+		if(values == null)
+			active_neg_constraints.put(val, new HashSet<>(Arrays.asList(neg_constraint)));
+		else
+			values.add(neg_constraint);
+	}
+	
 	public void explain(){
-		for (String val: active_pos_constraints.keySet())
-            System.out.println(val + "  -> " + active_pos_constraints.get(val));
+		for(String val : assignment){
+			System.out.print(val + " -> ");
+			if(active_pos_constraints.containsKey(val))
+				System.out.print(active_pos_constraints.get(val) + ", ");
+			else
+				System.out.print("No pos constraints, ");
+			
+			if(active_neg_constraints.containsKey(val))
+				System.out.println("!"+active_neg_constraints.get(val));
+			else
+				System.out.println("No neg constraints");
+		}
 	}
 	
 	public void printSudoku(){
