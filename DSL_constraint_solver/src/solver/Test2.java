@@ -2,6 +2,8 @@ package solver;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import parsing.ParseError;
 import parsing.Parser;
 
@@ -33,8 +35,8 @@ public class Test2{
         	Parser parser = new Parser("src/parsing/test.txt");
     		DSL dsl = parser.parse();
     		//dsl.solve_recursively().print();
-        	SearchTree tree = new SearchTree(dsl.vars, dsl.constraints);
-        	
+        	//SearchTree tree = new SearchTree(dsl.vars, dsl.constraints);
+        	Solver tree = new Solver(new LinkedList<>(dsl.vars), dsl.constraints);
         
         	ArrayList<Assignment> solutions = new ArrayList<>();
         	for(Assignment ass : tree){
@@ -45,6 +47,6 @@ public class Test2{
         	
         	System.out.println("Solutions:");
         	for(Assignment assign : solutions)
-        		assign.print();
+        		System.out.println("Got: "+assign.size);
         }
 }
