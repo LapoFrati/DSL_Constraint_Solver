@@ -47,6 +47,7 @@ public class Test2{
         	
         	System.out.println("Solutions:");
         	for(Assignment assign : solutions)
-        		System.out.println("Got: "+assign.size);
+        		assign.print();
+        	System.out.println(solutions.size());
         }
 }
