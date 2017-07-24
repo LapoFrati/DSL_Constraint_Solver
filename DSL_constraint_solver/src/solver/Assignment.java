@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Assignment {
-	LinkedList<String> assignment;
-	public HashMap<String,HashSet<String>> active_pos_constraints, active_neg_constraints;
-	int size, curr_size;
+	private LinkedList<String> assignment;
+	private HashMap<String,HashSet<String>> active_pos_constraints, active_neg_constraints;
+	private int size, curr_size;
 	
 	public Assignment(int size){
 		this.size = size;

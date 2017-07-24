@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Variable {
-	String var_name;
+	private String var_name;
 	public LinkedList<String> domain;
 	
 	public Variable(String name, LinkedList<String> values){

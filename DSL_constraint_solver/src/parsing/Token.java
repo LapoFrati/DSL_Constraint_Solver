@@ -21,8 +21,8 @@ class Token{
 	    }
 	}
 	
-	public TokenType type;
-	public String data;
+	private TokenType type;
+	private String data;
 	
 	public Token(TokenType type, String data) {
 	  this.type = type;
@@ -33,5 +33,9 @@ class Token{
 	public String toString() {
 	  return String.format("(%s %s)", type.name(), data);
 	}
+	
+	public boolean is(TokenType type){ return this.type.equals(type); }
+	
+	public String get(){ return this.data; }
 
 }

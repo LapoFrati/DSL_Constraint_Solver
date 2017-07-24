@@ -6,14 +6,12 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Constraints {
-	public HashMap<String, HashSet<String>> complementary_set;
-	public LinkedList<Variable> vars;
+	private HashMap<String, HashSet<String>> complementary_set;
 	public HashMap<String,HashSet<String>> pos_constraints, neg_constraints;
 	
 	public Constraints(LinkedList<Variable> vars2, HashMap<String,HashSet<String>> pos_constraints, HashMap<String,HashSet<String>> neg_constraints){
 		this.pos_constraints = pos_constraints;
 		this.neg_constraints = neg_constraints;
-		this.vars = vars2;
 		this.complementary_set = new HashMap<>();
 		
 		for (Variable var : vars2){
