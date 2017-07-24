@@ -1,13 +1,13 @@
 package solver;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DSL {
-	public ArrayList<Variable> vars;
+	public LinkedList<Variable> vars;
 	public Assignment solution;
 	public Constraints constraints;
 	
-	public DSL(ArrayList<Variable> vars,Constraints constraints){
+	public DSL(LinkedList<Variable> vars,Constraints constraints){
 		this.vars = vars;
 		this.constraints = constraints;
 	}

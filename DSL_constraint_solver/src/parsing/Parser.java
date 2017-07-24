@@ -1,8 +1,8 @@
 package parsing;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import parsing.Token.TokenType;
@@ -27,7 +27,7 @@ public class Parser {
 	}
 	
 	public DSL dsl() throws ParseError{
-		ArrayList<Variable> vars = vars();
+		LinkedList<Variable> vars = vars();
 		HashMap<String,HashSet<String>> pos_constraints = constr();
 		HashMap<String,HashSet<String>> neg_constraints = constr();
 		Constraints constraints = new Constraints(vars, pos_constraints, neg_constraints);
@@ -60,8 +60,8 @@ public class Parser {
 		return constraints;
 	}
 	
-	public ArrayList<Variable> vars() throws ParseError{
-		ArrayList<Variable> vars = new ArrayList<>();
+	public LinkedList<Variable> vars() throws ParseError{
+		LinkedList<Variable> vars = new LinkedList<>();
 		while(!tokens.peek().type.equals(TokenType.CURLYOPEN))
 			vars.add(var());
 		return vars;
@@ -70,17 +70,13 @@ public class Parser {
 	public Variable var() throws ParseError{ // x = { x1, x2, x3 }
 		Token name = expect(TokenType.VAR);
 		expect(TokenType.EQUAL);
-		ArrayList<String> values = val_list();
+		LinkedList<String> values = val_list();
 		return new Variable(name.data, values);
 	}
 	
-	public String var_name() throws ParseError{
-		return expect(TokenType.VAR).data;
-	}
-	
-	public ArrayList<String> val_list() throws ParseError{ // { x1, x2, x3 }\n
+	public LinkedList<String> val_list() throws ParseError{ // { x1, x2, x3 }\n
 		Token curr_tok;
-		ArrayList<String> values = new ArrayList<>();
+		LinkedList<String> values = new LinkedList<>();
 		curr_tok = expect(TokenType.CURLYOPEN);
 		while(!tokens.peek().type.equals(TokenType.CURLYCLOSE)){
 			curr_tok = expect(TokenType.VALUE);

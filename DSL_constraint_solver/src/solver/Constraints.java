@@ -1,22 +1,22 @@
 package solver;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Constraints {
 	public HashMap<String, HashSet<String>> complementary_set;
-	public ArrayList<Variable> vars;
+	public LinkedList<Variable> vars;
 	public HashMap<String,HashSet<String>> pos_constraints, neg_constraints;
 	
-	public Constraints(ArrayList<Variable> vars, HashMap<String,HashSet<String>> pos_constraints, HashMap<String,HashSet<String>> neg_constraints){
+	public Constraints(LinkedList<Variable> vars2, HashMap<String,HashSet<String>> pos_constraints, HashMap<String,HashSet<String>> neg_constraints){
 		this.pos_constraints = pos_constraints;
 		this.neg_constraints = neg_constraints;
-		this.vars = vars;
+		this.vars = vars2;
 		this.complementary_set = new HashMap<>();
 		
-		for (Variable var : vars){
+		for (Variable var : vars2){
 			for (String value : var.domain){
 				HashSet<String> temp = (HashSet<String>) var.domain.stream().filter(el -> !el.equals(value)).collect(Collectors.toSet());
 				complementary_set.put(value, temp);

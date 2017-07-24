@@ -1,24 +1,24 @@
 package solver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class Assignment {
-	ArrayList<String> assignment;
+	LinkedList<String> assignment;
 	public HashMap<String,HashSet<String>> active_pos_constraints, active_neg_constraints;
 	int size, curr_size;
 	
 	public Assignment(int size){
 		this.size = size;
-		this.assignment = new ArrayList<>();
+		this.assignment = new LinkedList<>();
 		this.active_pos_constraints = new HashMap<>();
 		curr_size = 0;
 	}
 	
-	public Assignment(int size, ArrayList<String> assignment, int curr_size){
+	public Assignment(int size, LinkedList<String> assignment, int curr_size){
 		this.size = size;
 		this.assignment = assignment;
 		this.active_pos_constraints = new HashMap<>();
@@ -31,7 +31,7 @@ public class Assignment {
 		curr_size++;
 	}
 	
-	public ArrayList<String> getAssignment(){
+	public LinkedList<String> getAssignment(){
 		return assignment;
 	}
 	
@@ -49,7 +49,7 @@ public class Assignment {
 	
 	@SuppressWarnings("unchecked")
 	public Assignment clone(){
-		return new Assignment(size, (ArrayList<String>) assignment.clone(), curr_size);
+		return new Assignment(size, (LinkedList<String>) assignment.clone(), curr_size);
 	}
 	
 	public void print(){

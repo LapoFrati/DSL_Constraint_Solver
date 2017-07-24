@@ -1,14 +1,14 @@
 package solver;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Variable {
 	String var_name;
-	public ArrayList<String> domain;
+	public LinkedList<String> domain;
 	
-	public Variable(String name, ArrayList<String> values){
+	public Variable(String name, LinkedList<String> values){
 		var_name = name;
 		domain = values;
 	}
@@ -27,7 +27,7 @@ public class Variable {
 	
 	public Variable clone(){
 		@SuppressWarnings("unchecked")
-		Variable new_var = new Variable(this.var_name, (ArrayList<String>) this.domain.clone());
+		Variable new_var = new Variable(this.var_name, (LinkedList<String>) this.domain.clone());
 		return new_var;
 	}
 	

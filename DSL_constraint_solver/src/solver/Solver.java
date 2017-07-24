@@ -39,15 +39,7 @@ public class Solver implements Iterable<Assignment>{
 		
 		return new Consumer();
 	}
-	/*
-	public void noise(){
-		try {
-			Thread.sleep((long) (Math.random()*100));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	*/
+	
 	public class Consumer implements Iterator<Assignment>{
 
 		@Override
