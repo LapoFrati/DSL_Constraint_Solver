@@ -27,12 +27,11 @@ public class Parser {
 	}
 	
 	public DSL dsl() throws ParseError{
-		DSL dsl = new DSL();
-		dsl.vars = vars();
-		dsl.pos_constraints = constr();
-		dsl.neg_constraints = constr();
-		Constraints constraints = new Constraints(dsl.vars, dsl.pos_constraints, dsl.neg_constraints);
-		dsl.constraints = constraints;
+		ArrayList<Variable> vars = vars();
+		HashMap<String,HashSet<String>> pos_constraints = constr();
+		HashMap<String,HashSet<String>> neg_constraints = constr();
+		Constraints constraints = new Constraints(vars, pos_constraints, neg_constraints);
+		DSL dsl = new DSL(vars, constraints);
 		dsl.print();
 		return dsl;
 	}
