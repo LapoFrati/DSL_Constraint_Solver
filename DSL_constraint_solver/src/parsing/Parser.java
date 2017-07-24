@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Queue;
+
+import parsing.Token.TokenType;
 import solver.Constraints;
 import solver.DSL;
 import solver.Variable;
@@ -12,17 +14,15 @@ import solver.Variable;
 public class Parser {
 	
 	private String path;
-	private String allowed_var_names = "[a-z]";
-	private String allowed_var_values = "[a-z][0-9]";
-	private Queue<String> tokens;
+	private Queue<Token> tokens;
 
 	public Parser(String input_file) {
 		path = input_file;
 	}
 	
 	public DSL parse() throws IOException, ParseError {
-		Tokenizer tokenizer = new Tokenizer(path);
-		tokens = tokenizer.tokenize();
+		Lexer lexer = new Lexer(path);
+		tokens = lexer.lex();
 		return dsl();
 	}
 	
@@ -32,77 +32,76 @@ public class Parser {
 		HashMap<String,HashSet<String>> neg_constraints = constr();
 		Constraints constraints = new Constraints(vars, pos_constraints, neg_constraints);
 		DSL dsl = new DSL(vars, constraints);
-		dsl.print();
 		return dsl;
 	}
 	
 	public HashMap<String,HashSet<String>> constr() throws ParseError{ // { (y1, z1), (y2, z2), (y3, z3) }\n
 		HashMap<String,HashSet<String>> constraints = new HashMap<>();
-		String val1,val2;
-		optional("!");
-		expect("\\{");
-		while(!tokens.peek().matches("\\}")){
-			expect("\\(");
-			val1 = expect(allowed_var_values);
-			expect("\\,");
-			val2 = expect(allowed_var_values);
-			expect("\\)");
-			optional(",");
-			if(constraints.containsKey(val1))
-				constraints.get(val1).add(val2);
+		Token val1,val2;
+		optional(TokenType.NOT);
+		expect(TokenType.CURLYOPEN);
+		while(!tokens.peek().type.equals(TokenType.CURLYCLOSE)){
+			expect(TokenType.PARENOPEN);
+			val1 = expect(TokenType.VALUE);
+			expect(TokenType.COMMA);
+			val2 = expect(TokenType.VALUE);
+			expect(TokenType.PARENCLOSE);
+			optional(TokenType.COMMA);
+			if(constraints.containsKey(val1.data))
+				constraints.get(val1.data).add(val2.data);
 			else{
 				HashSet<String> new_entry = new HashSet<String>();
-				new_entry.add(val2);
-				constraints.put(val1, new_entry);
+				new_entry.add(val2.data);
+				constraints.put(val1.data, new_entry);
 			}	
 		}
-		expect("}");
-		optional("\n");
+		expect(TokenType.CURLYCLOSE);
+		optional(TokenType.NEWLINE);
 		return constraints;
 	}
 	
 	public ArrayList<Variable> vars() throws ParseError{
 		ArrayList<Variable> vars = new ArrayList<>();
-		while(!tokens.peek().matches("\\{"))
+		while(!tokens.peek().type.equals(TokenType.CURLYOPEN))
 			vars.add(var());
 		return vars;
 	}
 	
 	public Variable var() throws ParseError{ // x = { x1, x2, x3 }
-		String name = expect(allowed_var_names);
-		expect("=");
+		Token name = expect(TokenType.VAR);
+		expect(TokenType.EQUAL);
 		ArrayList<String> values = val_list();
-		return new Variable(name, values);
+		return new Variable(name.data, values);
 	}
 	
-	public Character var_name() throws ParseError{
-		return expect(allowed_var_names).charAt(0);
+	public String var_name() throws ParseError{
+		return expect(TokenType.VAR).data;
 	}
 	
 	public ArrayList<String> val_list() throws ParseError{ // { x1, x2, x3 }\n
-		String curr_tok;
+		Token curr_tok;
 		ArrayList<String> values = new ArrayList<>();
-		curr_tok = expect("\\{");
-		while(!tokens.peek().matches("\\}")){
-			curr_tok = expect(allowed_var_values);
-			values.add(curr_tok);
-			optional(",");
+		curr_tok = expect(TokenType.CURLYOPEN);
+		while(!tokens.peek().type.equals(TokenType.CURLYCLOSE)){
+			curr_tok = expect(TokenType.VALUE);
+			values.add(curr_tok.data);
+			optional(TokenType.COMMA);
 		}
-		expect("}");
-		optional("\n");
+		expect(TokenType.CURLYCLOSE);
+		optional(TokenType.NEWLINE);
 		return values;
 	}
 	
 	// removes the first token, checks it against the pattern and returns it
-	public String expect(String pattern) throws ParseError{
-		String curr_tok = null;
+	public Token expect(TokenType type) throws ParseError{
+		Token curr_tok = null;
 		if(!tokens.isEmpty()) curr_tok = tokens.remove();
-			if(!curr_tok.matches(pattern)) 
-				throw new ParseError("Expected "+pattern+" but got "+curr_tok + ".");
+			if(!curr_tok.type.equals(type)) 
+				throw new ParseError("Expected "+type+" but got "+curr_tok + ".");
 		return curr_tok;
 	}
 	
-	public void optional(String pattern){
-		if(!tokens.isEmpty() && tokens.peek().matches(pattern)) tokens.remove();
+	public void optional(TokenType type){
+		if(!tokens.isEmpty() && tokens.peek().type.equals(type)) tokens.remove();
 	}
 }

@@ -31,11 +31,7 @@ public class Lexer {
 				}
 			}
 		}
-		//for (TokenType tokenType : TokenType.values())
-		//	  System.out.println(tokenType.name());
-		
-		System.out.println(tokens);
-		
+		//System.out.println(tokens);
 		return tokens;
 	}
 	public Lexer(String path){
