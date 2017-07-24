@@ -1,14 +1,16 @@
 package solver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class DSL {
 	public ArrayList<Variable> vars;
-	public HashMap<String,HashSet<String>> pos_constraints, neg_constraints;
 	public Assignment solution;
 	public Constraints constraints;
+	
+	public DSL(ArrayList<Variable> vars,Constraints constraints){
+		this.vars = vars;
+		this.constraints = constraints;
+	}
 	
 	public Assignment solve_recursively(){
 		if(recurr(new Assignment(vars.size()),0) == false)
@@ -38,9 +40,6 @@ public class DSL {
 	public void print(){
 		for(Variable var : vars)
 			var.print();
-		for (String val: pos_constraints.keySet())
-            System.out.println(val + "  -> " + pos_constraints.get(val));
-		for (String val: neg_constraints.keySet())
-            System.out.println(val + "  !-> " + neg_constraints.get(val));
+		constraints.print();
 	}
 }
