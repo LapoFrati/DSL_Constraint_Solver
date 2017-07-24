@@ -3,6 +3,7 @@ package parsing;
 import java.io.IOException;
 
 import solver.DSL;
+import solver.Solver;
 
 public class Test {
 	
@@ -19,7 +20,7 @@ public class Test {
 		Parser newparser = new Parser("src/parsing/test.txt");
 		DSL dsl = newparser.parse();
 		dsl.print();
-		dsl.solve_recursively().explain();
-		
+		Solver solver = new Solver(dsl);
+		solver.solve_recursively().explain();
 	}
 }

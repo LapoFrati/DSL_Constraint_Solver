@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Assignment {
 	LinkedList<String> assignment;
@@ -15,15 +16,8 @@ public class Assignment {
 		this.size = size;
 		this.assignment = new LinkedList<>();
 		this.active_pos_constraints = new HashMap<>();
-		curr_size = 0;
-	}
-	
-	public Assignment(int size, LinkedList<String> assignment, int curr_size){
-		this.size = size;
-		this.assignment = assignment;
-		this.active_pos_constraints = new HashMap<>();
 		this.active_neg_constraints = new HashMap<>();
-		this.curr_size = curr_size;
+		curr_size = 0;
 	}
 	
 	public void assign(String value){
@@ -49,7 +43,18 @@ public class Assignment {
 	
 	@SuppressWarnings("unchecked")
 	public Assignment clone(){
-		return new Assignment(size, (LinkedList<String>) assignment.clone(), curr_size);
+		Assignment new_assign = new Assignment(this.size);
+		new_assign.assignment = (LinkedList<String>) this.assignment.clone();
+		new_assign.curr_size = this.curr_size;
+		new_assign.active_neg_constraints = (HashMap<String, HashSet<String>>) this.active_neg_constraints.entrySet().stream()
+	    .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<String>(e.getValue())));
+		new_assign.active_pos_constraints = (HashMap<String, HashSet<String>>) this.active_pos_constraints.entrySet().stream()
+			    .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<String>(e.getValue())));
+		/*for (Entry<String, HashSet<String>> entry: this.active_neg_constraints.entrySet()){
+			System.out.println(entry);
+			new_assign.active_neg_constraints.put(entry.getKey(), (HashSet<String>) entry.getValue().clone());
+		}*/
+		return new_assign;
 	}
 	
 	public void print(){
