@@ -93,5 +93,6 @@ public class Assignment {
 			if((i+1) % 4 == 0)
 				System.out.println();
 		}
+		System.out.println();
 	}
 }
