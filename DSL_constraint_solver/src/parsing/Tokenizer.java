@@ -9,8 +9,9 @@ import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Lexer {
-	public static Queue<String> tokenize(String path) throws IOException{
+public class Tokenizer {
+	String path;
+	public Queue<String> tokenize() throws IOException{
 		String input = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 		ArrayDeque<String> tokens = new ArrayDeque<String>();
 		// tokens := { | } | , | = | x | x1 | \n | ( | ) ! 
@@ -20,5 +21,8 @@ public class Lexer {
 		    tokens.add(matcher.group());
 		}
 		return tokens;
+	}
+	public Tokenizer(String path){
+		this.path = path;
 	}
 }

@@ -21,7 +21,8 @@ public class Parser {
 	}
 	
 	public DSL parse() throws IOException, ParseError {
-		tokens = Lexer.tokenize(path);
+		Tokenizer tokenizer = new Tokenizer(path);
+		tokens = tokenizer.tokenize();
 		return dsl();
 	}
 	
