@@ -27,7 +27,7 @@ public class Constraints {
 	}
 	
 	public boolean check_consistency(Assignment assignment){
-		for (String val :assignment.getAssignment()){
+		for (String val :assignment.assignment){
 			if(pos_constraints.containsKey(val))
 				if(!assignment.containsAll(pos_constraints.get(val)))
 					return false;

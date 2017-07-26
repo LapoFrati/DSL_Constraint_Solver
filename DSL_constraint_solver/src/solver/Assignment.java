@@ -8,29 +8,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Assignment {
-	private LinkedList<String> assignment;
+	public  LinkedList<String> assignment;
 	private HashMap<String,HashSet<String>> active_pos_constraints, active_neg_constraints;
-	private int size, curr_size;
+	private int size;
 	
 	public Assignment(int size){
 		this.size = size;
 		this.assignment = new LinkedList<>();
 		this.active_pos_constraints = new HashMap<>();
 		this.active_neg_constraints = new HashMap<>();
-		curr_size = 0;
-	}
-	
-	public void assign(String value){
-		assignment.add(value);
-		curr_size++;
-	}
-	
-	public LinkedList<String> getAssignment(){
-		return assignment;
 	}
 	
 	public boolean complete(){
-		return curr_size == size;
+		return assignment.size() == size;
 	}
 	
 	public boolean contains(String value){
@@ -45,7 +35,6 @@ public class Assignment {
 	public Assignment clone(){
 		Assignment new_assign = new Assignment(this.size);
 		new_assign.assignment = (LinkedList<String>) this.assignment.clone();
-		new_assign.curr_size = this.curr_size;
 		new_assign.active_neg_constraints = (HashMap<String, HashSet<String>>) this.active_neg_constraints.entrySet().stream()
 	    .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<String>(e.getValue())));
 		new_assign.active_pos_constraints = (HashMap<String, HashSet<String>>) this.active_pos_constraints.entrySet().stream()

@@ -48,9 +48,9 @@ public class Solver implements Iterable<Assignment>{
 			}
 		}
 		else
-			for( String value : vars.get(pos).getDomain()){
+			for( String value : vars.get(pos).domain){
 				Assignment new_assign = assignment.clone();
-				new_assign.assign(value);
+				new_assign.assignment.add(value);
 				if(found = recurr(new_assign, pos+1))
 					break;
 			}
@@ -132,7 +132,7 @@ public class Solver implements Iterable<Assignment>{
 				Variable curr_var = remaining_vars.pop(); // get a variable from the list of available ones
 				for (String value : curr_var.domain){ // for each value in the domain of that variable try to assign it
 					Assignment new_assignment = assignment.clone();
-					new_assignment.assign(value);
+					new_assignment.assignment.add(value);
 					HashSet<String> new_invalid_values = update_invalid_values(value, new_assignment);
 					LinkedList<Variable> new_remaining_vars = update_remaining_variables(remaining_vars, new_invalid_values);
 					explore(new_assignment, new_remaining_vars);

@@ -10,8 +10,8 @@ public class Test2{
         public static void main(String args[]) throws IOException, ParseError
         {
         	
-        	Parser parser = new Parser("src/parsing/test.txt");
-        	//Parser parser = new Parser("src/parsing/sudoku.txt");
+        	//Parser parser = new Parser("src/parsing/test.txt");
+        	Parser parser = new Parser("src/parsing/sudoku.txt");
     		DSL dsl = parser.parse();
         	dsl.print();
         	Solver solver = new Solver(dsl);
@@ -23,8 +23,8 @@ public class Test2{
         	
         	System.out.println("Solutions found: " + solutions.size());
         	for(Assignment assign : solutions){
-        		//assign.printSudoku();
-        		assign.print();
+        		assign.printSudoku();
+        		//assign.print();
         		assign.explain();
         		System.out.println();
         	}

@@ -1,6 +1,5 @@
 package solver;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -11,14 +10,6 @@ public class Variable {
 	public Variable(String name, LinkedList<String> values){
 		var_name = name;
 		domain = values;
-	}
-	
-	public ArrayDeque<String> getDomain(){
-		return new ArrayDeque<String>(domain);
-	}
-	
-	public String getValue(int index){
-		return domain.get(index);
 	}
 	
 	public int getDomainSize(){
